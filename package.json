@@ -2,6 +2,7 @@
   "name": "task-manager",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
@@ -10,7 +11,10 @@
   },
   "dependencies": {
     "babel-plugin-styled-components": "^2.1.4",
+    "dotenv": "^16.4.7",
     "framer-motion": "^12.6.2",
+    "mongodb": "^6.15.0",
+    "mongoose": "^8.13.0",
     "next": "15.2.4",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",

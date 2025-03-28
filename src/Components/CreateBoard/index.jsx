@@ -1,55 +1,3 @@
-// "use client";
-
-// import { useState } from "react";
-// import {
-//   Content,
-//   BoardContainer,
-//   CreateBoardButton,
-//   BoardItem,
-// } from "./styeldComponents";
-// import BoardModal from "../BoardModel";
-
-// const CreateBoard = () => {
-//   const [isModalOpen, setIsModalOpen] = useState(false);
-//   const [boards, setBoards] = useState([]);
-
-//   const handleCreateBoard = (boardTitle) => {
-//     if (boardTitle.trim()) {
-//       setBoards([...boards, boardTitle]);
-//       setIsModalOpen(false);
-//     }
-//   };
-//   return (
-//     <Content>
-//       <h2>William John's Workspace</h2>
-//       <p>
-//         {boards.length === 0
-//           ? "You don't have any boards in your workspace"
-//           : "Your Boards"}
-//       </p>
-
-//       <BoardContainer>
-//         {boards.map((board, index) => (
-//           <BoardItem key={index}>{board}</BoardItem>
-//         ))}
-
-//         <CreateBoardButton onClick={() => setIsModalOpen(true)}>
-//           + Create new board
-//         </CreateBoardButton>
-//       </BoardContainer>
-
-//       {isModalOpen && (
-//         <BoardModal
-//           onClose={() => setIsModalOpen(false)}
-//           onCreate={handleCreateBoard}
-//         />
-//       )}
-//     </Content>
-//   );
-// };
-
-// export default CreateBoard;
-
 "use client";
 
 import { useState, useEffect } from "react";
@@ -59,6 +7,7 @@ import {
   BoardContainer,
   CreateBoardButton,
   BoardItem,
+  TextContainer,
 } from "./styeldComponents";
 import BoardModal from "../BoardModel";
 
@@ -68,28 +17,60 @@ const CreateBoard = () => {
   const router = useRouter();
 
   useEffect(() => {
-    const storedBoards = JSON.parse(localStorage.getItem("boards")) || [];
-    setBoards(storedBoards);
+    const fetchBoards = async () => {
+      try {
+        const response = await fetch("/api/boards", {
+          method: "GET",
+        });
+        if (!response.ok) {
+          throw new Error("Failed to fetch boards");
+        }
+        const data = await response.json();
+        setBoards(data);
+      } catch (error) {
+        console.error("Error fetching boards:", error);
+        setBoards([]);
+      }
+    };
+    fetchBoards();
   }, []);
 
-  const handleCreateBoard = (boardTitle) => {
+  const handleCreateBoard = async (boardTitle) => {
     if (boardTitle.trim()) {
-      const newBoards = [...boards, boardTitle];
-      setBoards(newBoards);
-      localStorage.setItem("boards", JSON.stringify(newBoards));
-      setIsModalOpen(false);
+      try {
+        const response = await fetch("/api/boards", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ title: boardTitle }),
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to create board");
+        }
+
+        const newBoard = await response.json();
+        setBoards([...boards, newBoard]); // Update UI
+        setIsModalOpen(false);
+      } catch (error) {
+        console.error("Error creating board:", error);
+      }
     }
   };
 
   return (
     <Content>
-      <h2>William John's Workspace</h2>
-      <p>{boards.length === 0 ? "No boards found" : "Your Boards"}</p>
+      <TextContainer>
+        <h2>William John's Workspace</h2>
+        <p>{boards.length === 0 ? "No boards found" : "Your Boards"}</p>
+      </TextContainer>
 
       <BoardContainer>
-        {boards.map((board, index) => (
-          <BoardItem key={index} onClick={() => router.push(`/board/${board}`)}>
-            {board}
+        {boards.map((board) => (
+          <BoardItem
+            key={board._id}
+            onClick={() => router.push(`/board/${board._id}`)}
+          >
+            {board.title}
           </BoardItem>
         ))}
 

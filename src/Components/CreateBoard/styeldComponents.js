@@ -1,63 +1,14 @@
-// import styled from "styled-components";
-
-// export const Content = styled.div`
-//   text-align: center;
-//   color: white;
-//   margin-top: 20px;
-// `;
-
-// export const BoardContainer = styled.div`
-//   display: flex;
-//   flex-direction: column;
-//   align-items: center;
-//   margin-top: 20px;
-// `;
-
-// export const BoardItem = styled.div`
-//   padding: 10px;
-//   margin: 5px;
-//   background: white;
-//   color: black;
-//   border-radius: 5px;
-//   width: 200px;
-//   text-align: center;
-// `;
-
-// export const CreateBoardButton = styled.button`
-//   padding: 15px 25px;
-//   border: 2px dashed white;
-//   border-radius: 10px;
-//   background: transparent;
-//   color: white;
-//   font-size: 16px;
-//   cursor: pointer;
-//   margin-top: 20px;
-//   transition: 0.3s;
-
-//   &:hover {
-//     background: rgba(255, 255, 255, 0.2);
-//   }
-// `;
-
-// export const BoardInput = styled.input`
-//   padding: 10px;
-//   border-radius: 5px;
-//   border: none;
-//   outline: none;
-//   width: 200px;
-//   text-align: center;
-//   background: white;
-//   color: black;
-// `;
-
 import styled from "styled-components";
 
 export const Content = styled.div`
   text-align: center;
   color: white;
-  /* margin-top: 20px; */
+  padding-top: 4%;
   background-color: #0074bf;
   height: 100vh;
+  display: flex;
+  flex-direction: column;
+  gap: 8%;
 `;
 
 export const BoardContainer = styled.div`
@@ -127,4 +78,10 @@ export const CreateBoardButton = styled.button`
   &:hover {
     background: rgba(255, 255, 255, 0.2);
   }
+`;
+
+export const TextContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 `;
