@@ -355,14 +355,11 @@ const BoardTasks = () => {
     }
 
     try {
-      const response = await fetch(
-        `/api/boards/${boardId}/lists/${listId}/tasks`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ taskName: taskText }),
-        }
-      );
+      const response = await fetch(`/api/boards/${boardId}/lists/${listId}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ taskName: taskText }),
+      });
 
       if (!response.ok) {
         const errorText = await response.text();
