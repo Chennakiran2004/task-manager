@@ -90,6 +90,8 @@ export async function GET(req, { params }) {
       .collection("boards")
       .findOne({ _id: new ObjectId(boards) });
 
+    console.log(boardData, "boards boardData");
+
     if (!boardData) {
       return NextResponse.json({ message: "Board not found" }, { status: 404 });
     }

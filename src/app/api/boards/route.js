@@ -29,9 +29,9 @@ export async function POST(request) {
     const newBoard = {
       title,
       lists: [
-        { listName: "To Do", taskIds: [] },
-        { listName: "Doing", taskIds: [] },
-        { listName: "Done", taskIds: [] },
+        // { listName: "To Do", taskIds: [] },
+        // { listName: "Doing", taskIds: [] },
+        // { listName: "Done", taskIds: [] },
       ],
     };
 

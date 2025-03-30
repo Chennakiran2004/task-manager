@@ -142,3 +142,13 @@ export const ReorderItem = styled(motion.li)`
     cursor: grabbing;
   }
 `;
+
+export const TaskCard = styled.div`
+  background-color: #f4f5f7;
+  border-radius: 3px;
+  padding: 8px;
+  margin-bottom: 8px;
+  box-shadow: 0 1px 0 rgba(9, 30, 66, 0.25);
+  font-size: 14px;
+  color: #172b4d;
+`;
