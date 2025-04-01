@@ -1,12 +1,9 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-
 import { useState, useEffect } from "react";
-
 import {
   Header,
-  HomeIcon,
   HomeIconContainer,
   HeaderRightSection,
   OrganizationButton,
@@ -21,7 +18,6 @@ import {
 } from "../WorkSpace/styledComponents";
 
 import { DropdownItem, DropdownMenu } from "./styledComponents";
-
 import { FaSearch } from "react-icons/fa";
 
 const Navbar = () => {
@@ -30,8 +26,23 @@ const Navbar = () => {
   const [isDropdownOpen, setDropdownOpen] = useState(false);
 
   useEffect(() => {
-    const storedBoards = JSON.parse(localStorage.getItem("boards")) || [];
-    setBoards(storedBoards);
+    const fetchBoards = async () => {
+      try {
+        const response = await fetch("/api/boards", {
+          method: "GET",
+        });
+        if (!response.ok) {
+          throw new Error("Failed to fetch boards");
+        }
+        const data = await response.json();
+        setBoards(data);
+      } catch (error) {
+        console.error("Error fetching boards:", error);
+        setBoards([]);
+      }
+    };
+
+    fetchBoards();
   }, []);
 
   const handleHomeClick = () => {
@@ -42,8 +53,8 @@ const Navbar = () => {
     router.push("/");
   };
 
-  const handleBoardClick = (board) => {
-    router.push(`/board/${board}`);
+  const handleBoardClick = (boardId) => {
+    router.push(`/board/${boardId}`);
     setDropdownOpen(false); // Close dropdown after clicking
   };
 
@@ -75,12 +86,12 @@ const Navbar = () => {
           {isDropdownOpen && (
             <DropdownMenu>
               {boards.length > 0 ? (
-                boards.map((board, index) => (
+                boards.map((board) => (
                   <DropdownItem
-                    key={index}
-                    onClick={() => handleBoardClick(board)}
+                    key={board._id}
+                    onClick={() => handleBoardClick(board._id)}
                   >
-                    {board}
+                    {board.title}
                   </DropdownItem>
                 ))
               ) : (

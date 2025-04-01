@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import { ObjectId } from "mongodb";
 import clientPromise from "../../../../../../lib/mongodb";
 
+// <--------------------------Add list------------------------------------->
+
 export async function POST(req, { params }) {
   try {
     const client = await clientPromise;
@@ -70,6 +72,9 @@ export async function POST(req, { params }) {
     );
   }
 }
+
+// <----------------------------get list------------------------------------->
+
 export async function GET(req, { params }) {
   try {
     const client = await clientPromise;
@@ -105,3 +110,5 @@ export async function GET(req, { params }) {
     );
   }
 }
+
+// <--------------------------delete list------------------------->

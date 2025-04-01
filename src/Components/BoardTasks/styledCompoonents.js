@@ -152,3 +152,9 @@ export const TaskCard = styled.div`
   font-size: 14px;
   color: #172b4d;
 `;
+
+export const ListTitleContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+`;
