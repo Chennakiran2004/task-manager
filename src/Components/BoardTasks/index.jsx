@@ -37,7 +37,9 @@ const BoardTasks = () => {
           return;
         }
 
-        const response = await fetch(`/api/boards/${boardId}/lists`);
+        const response = await fetch(
+          `http://localhost:5000/api/boards/${boardId}/lists`
+        );
         if (!response.ok) {
           const errorData = await response.json();
           throw new Error(`Failed to fetch lists: ${errorData.message}`);
@@ -65,7 +67,10 @@ const BoardTasks = () => {
       try {
         if (!boardId || !listId) return;
 
-        const response = await fetch(`/api/boards/${boardId}/lists/${listId}`);
+        // const response = await fetch(`/api/boards/${boardId}/lists/${listId}`);
+        const response = await fetch(
+          `http://localhost:5000/api/boards/${boardId}/lists/${listId}/tasks`
+        );
         if (!response.ok) {
           const errorData = await response.json();
           throw new Error(`Failed to fetch tasks: ${errorData.message}`);
@@ -97,11 +102,14 @@ const BoardTasks = () => {
 
     setIsLoading(true);
     try {
-      const response = await fetch(`/api/boards/${boardId}/lists/${listId}`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ taskName: taskText }),
-      });
+      const response = await fetch(
+        `http://localhost:5000/api/boards/${boardId}/lists/${listId}/tasks`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ taskName: taskText }),
+        }
+      );
 
       if (!response.ok) {
         const errorText = await response.text();
@@ -155,11 +163,14 @@ const BoardTasks = () => {
     }
 
     try {
-      const response = await fetch(`/api/boards/${boardId}/lists`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ listName: newListTitle }),
-      });
+      const response = await fetch(
+        `http://localhost:5000/api/boards/${boardId}/lists`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ listName: newListTitle }),
+        }
+      );
 
       if (!response.ok) {
         const errorData = await response.json();
@@ -192,9 +203,12 @@ const BoardTasks = () => {
     }
 
     try {
-      const response = await fetch(`/api/boards/${boardId}/lists/${listId}`, {
-        method: "DELETE",
-      });
+      const response = await fetch(
+        `http://localhost:5000/api/boards/${boardId}/lists/${listId}`,
+        {
+          method: "DELETE",
+        }
+      );
 
       if (!response.ok) {
         const contentType = response.headers.get("content-type");

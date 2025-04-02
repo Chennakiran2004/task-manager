@@ -77,7 +77,7 @@ const Navbar = () => {
             />
           </svg>
         </HomeIconContainer>
-        <OrganizationButton>Organization ⌄</OrganizationButton>
+        {/* <OrganizationButton>Organization ⌄</OrganizationButton> */}
         <div style={{ position: "relative" }}>
           <BoardsButton onClick={() => setDropdownOpen(!isDropdownOpen)}>
             📋 Boards ⌄
@@ -117,10 +117,10 @@ const Navbar = () => {
         <Logo>Task Manager</Logo>
       </HomeHeadingContainer>
       <InputAndLogoutContainer>
-        <InputElementContainer>
+        {/* <InputElementContainer>
           <InputeElement type="text" placeholder="Search" />
           <FaSearch />
-        </InputElementContainer>
+        </InputElementContainer> */}
         <h4 onClick={handleLogoutClick}>Logout</h4>
         <ProfileLogo src="/3.png" />
       </InputAndLogoutContainer>

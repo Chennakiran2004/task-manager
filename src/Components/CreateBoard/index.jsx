@@ -19,7 +19,7 @@ const CreateBoard = () => {
   useEffect(() => {
     const fetchBoards = async () => {
       try {
-        const response = await fetch("/api/boards", {
+        const response = await fetch("http://localhost:5000/api/boards", {
           method: "GET",
         });
         if (!response.ok) {
@@ -38,7 +38,7 @@ const CreateBoard = () => {
   const handleCreateBoard = async (boardTitle) => {
     if (boardTitle.trim()) {
       try {
-        const response = await fetch("/api/boards", {
+        const response = await fetch("http://localhost:5000/api/boards", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ title: boardTitle }),
