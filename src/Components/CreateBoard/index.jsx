@@ -10,6 +10,7 @@ import {
   TextContainer,
 } from "./styeldComponents";
 import BoardModal from "../BoardModel";
+import { BASE_URL } from "@/Constants/apiConstants";
 
 const CreateBoard = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -19,7 +20,7 @@ const CreateBoard = () => {
   useEffect(() => {
     const fetchBoards = async () => {
       try {
-        const response = await fetch("http://localhost:5000/api/boards", {
+        const response = await fetch(`${BASE_URL}api/boards`, {
           method: "GET",
         });
         if (!response.ok) {
@@ -38,7 +39,7 @@ const CreateBoard = () => {
   const handleCreateBoard = async (boardTitle) => {
     if (boardTitle.trim()) {
       try {
-        const response = await fetch("http://localhost:5000/api/boards", {
+        const response = await fetch(`${BASE_URL}api/boards`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ title: boardTitle }),

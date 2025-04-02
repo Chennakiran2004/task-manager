@@ -19,7 +19,7 @@ import {
 
 import { DropdownItem, DropdownMenu } from "./styledComponents";
 import { FaSearch } from "react-icons/fa";
-
+import { BASE_URL } from "@/Constants/apiConstants";
 const Navbar = () => {
   const router = useRouter();
   const [boards, setBoards] = useState([]);
@@ -28,7 +28,7 @@ const Navbar = () => {
   useEffect(() => {
     const fetchBoards = async () => {
       try {
-        const response = await fetch("/api/boards", {
+        const response = await fetch(`${BASE_URL}api/boards`, {
           method: "GET",
         });
         if (!response.ok) {
@@ -55,7 +55,7 @@ const Navbar = () => {
 
   const handleBoardClick = (boardId) => {
     router.push(`/board/${boardId}`);
-    setDropdownOpen(false); // Close dropdown after clicking
+    setDropdownOpen(false);
   };
 
   return (

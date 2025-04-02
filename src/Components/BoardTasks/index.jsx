@@ -19,6 +19,7 @@ import Navbar from "../Navbar";
 import { useParams } from "next/navigation";
 import { Trash2 } from "lucide-react";
 import { Reorder } from "framer-motion"; // Import Reorder from framer-motion
+import { BASE_URL } from "@/Constants/apiConstants";
 
 const BoardTasks = () => {
   const [lists, setLists] = useState([]);
@@ -37,9 +38,7 @@ const BoardTasks = () => {
           return;
         }
 
-        const response = await fetch(
-          `http://localhost:5000/api/boards/${boardId}/lists`
-        );
+        const response = await fetch(`${BASE_URL}api/boards/${boardId}/lists`);
         if (!response.ok) {
           const errorData = await response.json();
           throw new Error(`Failed to fetch lists: ${errorData.message}`);
@@ -69,7 +68,7 @@ const BoardTasks = () => {
 
         // const response = await fetch(`/api/boards/${boardId}/lists/${listId}`);
         const response = await fetch(
-          `http://localhost:5000/api/boards/${boardId}/lists/${listId}/tasks`
+          `${BASE_URL}api/boards/${boardId}/lists/${listId}/tasks`
         );
         if (!response.ok) {
           const errorData = await response.json();
@@ -103,7 +102,7 @@ const BoardTasks = () => {
     setIsLoading(true);
     try {
       const response = await fetch(
-        `http://localhost:5000/api/boards/${boardId}/lists/${listId}/tasks`,
+        `${BASE_URL}api/boards/${boardId}/lists/${listId}/tasks`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -163,14 +162,11 @@ const BoardTasks = () => {
     }
 
     try {
-      const response = await fetch(
-        `http://localhost:5000/api/boards/${boardId}/lists`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ listName: newListTitle }),
-        }
-      );
+      const response = await fetch(`${BASE_URL}api/boards/${boardId}/lists`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ listName: newListTitle }),
+      });
 
       if (!response.ok) {
         const errorData = await response.json();
@@ -204,7 +200,7 @@ const BoardTasks = () => {
 
     try {
       const response = await fetch(
-        `http://localhost:5000/api/boards/${boardId}/lists/${listId}`,
+        `${BASE_URL}api/boards/${boardId}/lists/${listId}`,
         {
           method: "DELETE",
         }
