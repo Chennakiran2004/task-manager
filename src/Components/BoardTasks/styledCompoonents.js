@@ -157,4 +157,42 @@ export const ListTitleContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  position: relative;
+  padding: 5px 0;
+`;
+
+export const ListOptionsButton = styled.button`
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #172b4d;
+  padding: 0;
+  display: flex;
+  align-items: center;
+
+  &:hover {
+    color: #005f8a;
+  }
+`;
+
+export const ListOptionsMenu = styled.div`
+  position: absolute;
+  background-color: white;
+  border: 1px solid #ccc;
+  padding: 8px;
+  right: 0;
+  top: 25px;
+  z-index: 10;
+  border-radius: 5px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  color: black;
+`;
+
+export const ListOption = styled.div`
+  padding: 6px 10px;
+  cursor: pointer;
+  white-space: nowrap;
+  &:hover {
+    background-color: #f0f0f0;
+  }
 `;

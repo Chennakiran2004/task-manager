@@ -14,12 +14,15 @@ import {
   TaskCard,
   AddListButton,
   ListTitleContainer,
+  ListOptionsButton,
+  ListOptionsMenu,
+  ListOption,
 } from "./styledCompoonents";
 import Navbar from "../Navbar";
 import { useParams } from "next/navigation";
-import { Trash2 } from "lucide-react";
 import { Reorder } from "framer-motion";
 import { BASE_URL } from "@/Constants/apiConstants";
+import { MoreVertical } from "lucide-react";
 
 const BoardTasks = () => {
   const [lists, setLists] = useState([]);
@@ -27,6 +30,9 @@ const BoardTasks = () => {
   const [newListTitle, setNewListTitle] = useState("");
   const [newTaskTexts, setNewTaskTexts] = useState({});
   const [isLoading, setIsLoading] = useState(false);
+  const [editingListId, setEditingListId] = useState(null);
+  const [editedListName, setEditedListName] = useState("");
+  const [menuOpenListId, setMenuOpenListId] = useState(null);
   const params = useParams();
   const boardId = params.board?.toString().trim();
 
@@ -48,7 +54,7 @@ const BoardTasks = () => {
         const formattedLists = (data.lists || []).map((list) => ({
           ...list,
           title: list.listName,
-          tasks: list.tasks || [],
+          tasks: list.taskIds || [],
           addingTask: false,
         }));
 
@@ -223,6 +229,7 @@ const BoardTasks = () => {
         updatedLists.splice(index, 1);
         return updatedLists;
       });
+      setMenuOpenListId(null);
     } catch (error) {
       console.error("Error deleting list:", error.message);
     }
@@ -232,13 +239,11 @@ const BoardTasks = () => {
     const newLists = [...lists];
     newLists[index].tasks = newTasks;
     setLists(newLists);
-
     updateTaskOrderInBackend(newLists[index]._id, newTasks);
   };
 
   const handleListReorder = (newLists) => {
     setLists(newLists);
-
     updateListOrderInBackend(newLists);
   };
 
@@ -283,6 +288,57 @@ const BoardTasks = () => {
     }
   };
 
+  const handleUpdateListName = async (listId, index) => {
+    if (!editedListName.trim() || !boardId || !listId) {
+      console.error("Invalid list name or IDs:", {
+        boardId,
+        listId,
+        editedListName,
+      });
+      setEditingListId(null);
+      setMenuOpenListId(null);
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        `${BASE_URL}api/boards/${boardId}/lists/${listId}`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ listName: editedListName }),
+        }
+      );
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(`Failed to update list name: ${errorData.message}`);
+      }
+
+      const { updatedList } = await response.json();
+      setLists((prevLists) => {
+        const updatedLists = [...prevLists];
+        updatedLists[index].title = updatedList.listName;
+        return updatedLists;
+      });
+      setEditingListId(null);
+      setMenuOpenListId(null);
+    } catch (error) {
+      console.error("Error updating list name:", error.message);
+    }
+  };
+
+  const toggleMenu = (listId) => {
+    setMenuOpenListId(menuOpenListId === listId ? null : listId);
+    setEditingListId(null);
+  };
+
+  const startEditingList = (listId, currentName) => {
+    setEditingListId(listId);
+    setEditedListName(currentName);
+    setMenuOpenListId(null);
+  };
+
   return (
     <>
       <Navbar />
@@ -298,12 +354,41 @@ const BoardTasks = () => {
             <Reorder.Item key={list._id} value={list}>
               <Column>
                 <ListTitleContainer>
-                  <ColumnTitle>{list.title}</ColumnTitle>
-                  <Trash2
-                    size={20}
-                    style={{ cursor: "pointer", color: "red" }}
-                    onClick={() => handleDeleteList(list._id, index)}
-                  />
+                  {editingListId === list._id ? (
+                    <TaskInput
+                      type="text"
+                      value={editedListName}
+                      onChange={(e) => setEditedListName(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                          handleUpdateListName(list._id, index);
+                        } else if (e.key === "Escape") {
+                          setEditingListId(null);
+                        }
+                      }}
+                      onBlur={() => handleUpdateListName(list._id, index)}
+                      autoFocus
+                    />
+                  ) : (
+                    <ColumnTitle>{list.title}</ColumnTitle>
+                  )}
+                  <ListOptionsButton onClick={() => toggleMenu(list._id)}>
+                    <MoreVertical size={20} />
+                  </ListOptionsButton>
+                  {menuOpenListId === list._id && (
+                    <ListOptionsMenu>
+                      <ListOption
+                        onClick={() => startEditingList(list._id, list.title)}
+                      >
+                        Update List
+                      </ListOption>
+                      <ListOption
+                        onClick={() => handleDeleteList(list._id, index)}
+                      >
+                        Close List
+                      </ListOption>
+                    </ListOptionsMenu>
+                  )}
                 </ListTitleContainer>
 
                 <Reorder.Group
