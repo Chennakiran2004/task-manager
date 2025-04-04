@@ -18,7 +18,7 @@ import {
 import Navbar from "../Navbar";
 import { useParams } from "next/navigation";
 import { Trash2 } from "lucide-react";
-import { Reorder } from "framer-motion"; // Import Reorder from framer-motion
+import { Reorder } from "framer-motion";
 import { BASE_URL } from "@/Constants/apiConstants";
 
 const BoardTasks = () => {
@@ -66,7 +66,6 @@ const BoardTasks = () => {
       try {
         if (!boardId || !listId) return;
 
-        // const response = await fetch(`/api/boards/${boardId}/lists/${listId}`);
         const response = await fetch(
           `${BASE_URL}api/boards/${boardId}/lists/${listId}/tasks`
         );
@@ -229,25 +228,20 @@ const BoardTasks = () => {
     }
   };
 
-  // Handle task reordering within a list
   const handleTaskReorder = (index, newTasks) => {
     const newLists = [...lists];
     newLists[index].tasks = newTasks;
     setLists(newLists);
 
-    // Optional: Update the backend with the new task order
     updateTaskOrderInBackend(newLists[index]._id, newTasks);
   };
 
-  // Handle list reordering
   const handleListReorder = (newLists) => {
     setLists(newLists);
 
-    // Optional: Update the backend with the new list order
     updateListOrderInBackend(newLists);
   };
 
-  // Optional: Update task order in the backend
   const updateTaskOrderInBackend = async (listId, tasks) => {
     if (!boardId || !listId) return;
 
@@ -270,7 +264,6 @@ const BoardTasks = () => {
     }
   };
 
-  // Optional: Update list order in the backend
   const updateListOrderInBackend = async (lists) => {
     if (!boardId) return;
 
@@ -294,13 +287,12 @@ const BoardTasks = () => {
     <>
       <Navbar />
       <BoardContainer>
-        {/* Wrap lists in Reorder.Group for list reordering */}
         <Reorder.Group
           axis="x"
           values={lists}
           onReorder={handleListReorder}
           as="div"
-          style={{ display: "flex", gap: "20px" }} // Adjust styling as needed
+          style={{ display: "flex", gap: "20px" }}
         >
           {lists.map((list, index) => (
             <Reorder.Item key={list._id} value={list}>
@@ -314,7 +306,6 @@ const BoardTasks = () => {
                   />
                 </ListTitleContainer>
 
-                {/* Task reordering */}
                 <Reorder.Group
                   axis="y"
                   values={list.tasks}
